@@ -58,3 +58,7 @@ resource "aws_api_gateway_integration_response" "url_shortner_get_api_response_i
 EOF
   }
 }
+
+output "GET_URL_SHORTENER" {
+  value = aws_api_gateway_resource.url_shortner_get_resource.path
+}

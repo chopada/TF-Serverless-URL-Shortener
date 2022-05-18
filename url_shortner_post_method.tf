@@ -1,7 +1,7 @@
 resource "aws_api_gateway_resource" "url_shortner_post_resource" {
   rest_api_id = aws_api_gateway_rest_api.url_shortner_api.id
   parent_id   = aws_api_gateway_rest_api.url_shortner_api.root_resource_id
-  path_part   = "url-shortner"
+  path_part   = "url-shortener"
 }
 
 resource "aws_api_gateway_method" "url_shortner_post_method" {
@@ -73,4 +73,8 @@ resource "aws_api_gateway_integration_response" "url_shortner_post_api_response_
         }
         EOF
   }
+}
+
+output "POST_URL_SHORTENER" {
+  value = aws_api_gateway_resource.url_shortner_post_resource.path
 }

@@ -50,9 +50,46 @@ terraform init
 terraform apply
 ```
 
+Output
+
+```
+API_URL = "https://<API_ID>.execute-api.ap-south-1.amazonaws.com/dev"
+GET_URL_SHORTENER = "/url-shortener/{shortId}"
+POST_URL_SHORTENER = "/url-shortener"
+```
+
+### Testing
+
+Do post api call to\
+ `https://<API_ID>.execute-api.ap-south-1.amazonaws.com/dev/url-shortener`
+
+Request Body:
+
+```
+{
+  "longURL": "https://halfsquare.in",
+  "owner": "Tushar",
+  "shortURL": "Halfsquare"
+}
+```
+
+Response:
+
+```
+{
+  "shortURL": "Halfsquare",
+  "longURL": "https://halfsquare.in",
+  "owner": "Tushar"
+}
+```
+
+Short url is generated now you can hit GET call or go to the folowing link in your browser\
+`https://<API_ID>.execute-api.ap-south-1.amazonaws.com/dev/url-shortener/<SHORT_ID>`\
+In our case SHORT_ID is `Halfsquare`
+
 ### Delete Deployment
 
-Run following commands in root directory of project
+Run following command
 
 ```
 terraform destroy

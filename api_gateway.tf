@@ -13,3 +13,6 @@ resource "aws_api_gateway_stage" "url_shortner_api_stage" {
   stage_name    = "dev"
 }
 
+output "API_URL" {
+  value = aws_api_gateway_stage.url_shortner_api_stage.invoke_url
+}
