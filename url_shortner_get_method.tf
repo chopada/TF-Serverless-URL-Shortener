@@ -1,10 +1,17 @@
 resource "aws_api_gateway_resource" "url_shortner_get_resource" {
+  depends_on = [
+    aws_api_gateway_rest_api.url_shortner_api,
+    aws_api_gateway_resource.url_shortner_post_resource
+  ]
   rest_api_id = aws_api_gateway_rest_api.url_shortner_api.id
   parent_id   = aws_api_gateway_resource.url_shortner_post_resource.id
   path_part   = "{shortId}"
 }
 
 resource "aws_api_gateway_method" "url_shortner_get_method" {
+  depends_on = [
+    aws_api_gateway_resource.url_shortner_get_resource
+  ]
   rest_api_id   = aws_api_gateway_rest_api.url_shortner_api.id
   resource_id   = aws_api_gateway_resource.url_shortner_get_resource.id
   http_method   = "GET"
@@ -12,6 +19,10 @@ resource "aws_api_gateway_method" "url_shortner_get_method" {
 }
 
 resource "aws_api_gateway_integration" "url_shortner_get_integration" {
+  depends_on = [
+    aws_api_gateway_method.url_shortner_get_method,
+    aws_iam_role.url_shortner_api_role
+  ]
   rest_api_id             = aws_api_gateway_rest_api.url_shortner_api.id
   resource_id             = aws_api_gateway_resource.url_shortner_get_resource.id
   http_method             = aws_api_gateway_method.url_shortner_get_method.http_method
@@ -35,6 +46,9 @@ EOF
 }
 
 resource "aws_api_gateway_method_response" "url_shortner_get_response_302" {
+  depends_on = [
+    aws_api_gateway_method.url_shortner_get_method
+  ]
   rest_api_id         = aws_api_gateway_rest_api.url_shortner_api.id
   resource_id         = aws_api_gateway_resource.url_shortner_get_resource.id
   http_method         = aws_api_gateway_method.url_shortner_get_method.http_method
@@ -43,6 +57,10 @@ resource "aws_api_gateway_method_response" "url_shortner_get_response_302" {
 }
 
 resource "aws_api_gateway_integration_response" "url_shortner_get_api_response_integration" {
+  depends_on = [
+    aws_api_gateway_integration.url_shortner_get_integration,
+    aws_api_gateway_method_response.url_shortner_get_response_302
+  ]
   rest_api_id       = aws_api_gateway_rest_api.url_shortner_api.id
   resource_id       = aws_api_gateway_resource.url_shortner_get_resource.id
   http_method       = aws_api_gateway_method.url_shortner_get_method.http_method

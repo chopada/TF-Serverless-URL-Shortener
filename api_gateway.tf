@@ -4,6 +4,10 @@ resource "aws_api_gateway_rest_api" "url_shortner_api" {
 }
 
 resource "aws_api_gateway_deployment" "url_shortner_api_deployment" {
+  depends_on = [
+    aws_api_gateway_integration_response.url_shortner_post_api_response_integration,
+    aws_api_gateway_integration_response.url_shortner_get_api_response_integration
+  ]
   rest_api_id = aws_api_gateway_rest_api.url_shortner_api.id
 }
 

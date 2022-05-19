@@ -1,10 +1,16 @@
 resource "aws_api_gateway_resource" "url_shortner_post_resource" {
+  depends_on = [
+    aws_api_gateway_rest_api.url_shortner_api
+  ]
   rest_api_id = aws_api_gateway_rest_api.url_shortner_api.id
   parent_id   = aws_api_gateway_rest_api.url_shortner_api.root_resource_id
   path_part   = "url-shortener"
 }
 
 resource "aws_api_gateway_method" "url_shortner_post_method" {
+  depends_on = [
+    aws_api_gateway_resource.url_shortner_post_resource
+  ]
   rest_api_id   = aws_api_gateway_rest_api.url_shortner_api.id
   resource_id   = aws_api_gateway_resource.url_shortner_post_resource.id
   http_method   = "POST"
@@ -12,6 +18,10 @@ resource "aws_api_gateway_method" "url_shortner_post_method" {
 }
 
 resource "aws_api_gateway_integration" "url_shortner_post_integration" {
+  depends_on = [
+    aws_api_gateway_method.url_shortner_post_method,
+    aws_iam_role.url_shortner_api_role
+  ]
   rest_api_id             = aws_api_gateway_rest_api.url_shortner_api.id
   resource_id             = aws_api_gateway_resource.url_shortner_post_resource.id
   http_method             = aws_api_gateway_method.url_shortner_post_method.http_method
@@ -50,6 +60,9 @@ resource "aws_api_gateway_integration" "url_shortner_post_integration" {
 }
 
 resource "aws_api_gateway_method_response" "url_shortner_post_response_200" {
+  depends_on = [
+    aws_api_gateway_method.url_shortner_post_method
+  ]
   rest_api_id = aws_api_gateway_rest_api.url_shortner_api.id
   resource_id = aws_api_gateway_resource.url_shortner_post_resource.id
   http_method = aws_api_gateway_method.url_shortner_post_method.http_method
@@ -57,6 +70,10 @@ resource "aws_api_gateway_method_response" "url_shortner_post_response_200" {
 }
 
 resource "aws_api_gateway_integration_response" "url_shortner_post_api_response_integration" {
+  depends_on = [
+    aws_api_gateway_integration.url_shortner_post_integration,
+    aws_api_gateway_method_response.url_shortner_post_response_200
+  ]
   rest_api_id = aws_api_gateway_rest_api.url_shortner_api.id
   resource_id = aws_api_gateway_resource.url_shortner_post_resource.id
   http_method = aws_api_gateway_method.url_shortner_post_method.http_method
